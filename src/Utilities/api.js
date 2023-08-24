@@ -2,7 +2,7 @@ import axios from "axios";
 
 const httpApi = axios.create({
     //baseURL: 'http://lavishkeys-001-site2.htempurl.com/api/',
-    baseURL: 'https://localhost:7019/api/', //YOUR_API_URL HERE
+    baseURL: 'https://localhost:7019/api/v1/', //YOUR_API_URL HERE
     headers: {
       'Content-Type': 'application/json',
     },

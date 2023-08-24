@@ -9,10 +9,10 @@ import { useNavigate } from "react-router-dom";
 import AppListViewScreen from "../../../components/common/AppListViewScreen";
 import ApiServices from "../../../services/ApiService";
 
-export default function BrandList() {
-  const [brandData, setBrandData] = useState([]);
+export default function CategoryList() {
+  const [categoryData, setCategoryData] = useState([]);
   useEffect(() => {
-    ApiServices.list("Brand", setBrandData);
+    ApiServices.list("Category", setCategoryData);
   }, []);
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
@@ -58,10 +58,10 @@ export default function BrandList() {
       key: "id",
       render: (data) => (
         <Space>
-          <AppEditButton editTooltiptitle="Edit Brand" data={data} />
-          <AppViewButton detailsTooltiptitle="Brand Details" data={data} />
+          <AppEditButton editTooltiptitle="Edit Category" data={data} />
+          <AppViewButton detailsTooltiptitle="Category Details" data={data} />
           <AppDeleteButton
-            deleteTooltiptitle="Delete Brand"
+            deleteTooltiptitle="Delete Category"
             data={data}
             onDelete={() => console.log(data)}
           />
@@ -71,10 +71,10 @@ export default function BrandList() {
   ];
   return (
     <AppListViewScreen
-      btntitle="Add Brand"
+      btntitle="Add Category"
       onClick={() => navigate("create")}
       columns={columns}
-      data={brandData}
+      data={categoryData}
       page={page}
       onChange={onChange}
     />

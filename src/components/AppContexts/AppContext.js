@@ -14,7 +14,14 @@ const AppContextProvider = ({children}) => {
     const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [resetForm, setResetForm] = useState(false)
     const [token, setToken] = useState(localStorage.getItem('token_ecom') || null)
+
+    const resetFormFunc=()=>{
+      setResetForm(true)
+    }
+
+  
  
     useEffect(() => {
 
@@ -74,7 +81,8 @@ const AppContextProvider = ({children}) => {
             userData,
             loading,
             token,
-            error
+            error,
+            resetForm
         }}
         >
             <AppActionsContext.Provider
@@ -83,7 +91,8 @@ const AppContextProvider = ({children}) => {
                     setUserData,
                     signInUser,
                     logout,
-                    setLoading
+                    setLoading,
+                    setResetForm
                 }}
             >
             {children}

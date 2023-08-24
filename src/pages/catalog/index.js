@@ -20,7 +20,23 @@ export const catalogRoutes=[
         element:<Brands/>
     },
     {
+        path:'/catalog/brands/create/:id',
+        element:<Brands/>
+    },
+    {
         path:'/catalog/category',
+        element:<Category/>
+    },
+    {
+        path:'/catalog/category/:id',
+        element:<Category/>
+    },
+    {
+        path:'/catalog/category/create',
+        element:<Category/>
+    },
+    {
+        path:'/catalog/category/create/:id',
         element:<Category/>
     },
     {
