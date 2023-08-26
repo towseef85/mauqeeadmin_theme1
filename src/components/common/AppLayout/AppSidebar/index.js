@@ -67,7 +67,7 @@ export default function AppSidebar({collapse}) {
        {
          key: 'psettings',
          icon:<LaptopOutlined/>,
-         label:'Product Settings' 
+         label:<NavLink to='/catalog/product/settings'>Product Settings</NavLink>
        }
       ]
     },

@@ -14,7 +14,7 @@ export default function AddCategory() {
   const [showInHomePage, setShowInHomePage] = useState(false);
   const [singleCategory, setSingleCategory] = useState(null);
   const [setFields, setSetFields] = useState(null);
-  const { AppSwitchControl } = AppControls;
+  const { AppSwitchControl, AppInputNumberControl } = AppControls;
   const getValues = { imageData: fileList };
 
   useEffect(() => {
@@ -47,11 +47,12 @@ export default function AddCategory() {
             min={3}
           />
 
-          <AppInputControl
+          <AppInputNumberControl
             label="Display Order"
             name="displayOrder"
+            min={1}
+            max={1000000}
             required={showInHomePage}
-            type="number"
           />
 
           <AppInputControl label="Meta Description" name="metaDescription" />

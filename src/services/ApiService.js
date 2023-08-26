@@ -20,6 +20,7 @@ const ApiServices={
         console.log('error',err.response.data)
         message.error(`Failed error = ${err.response.data}`)
     }),
+    update:async(url,values)=>await httpApi.put(url,values),
     get:(id,url, setState)=> httpApi.get(`${url}/${id}`),
 
     

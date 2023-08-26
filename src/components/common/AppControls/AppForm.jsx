@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import ApiServices from "../../../services/ApiService";
+import { v4 as uuid } from "uuid";
 
 export default function AppForm({
   getValues,
@@ -27,19 +28,41 @@ export default function AppForm({
   const navigate = useNavigate();
   const [formName] = Form.useForm();
   const onFinish = async () => {
-    setLoading(true);
-    await formName
-      .validateFields()
-      .then((values) => {
-        let newValues = { ...values, ...getValues };
-        ApiServices.create(controller, newValues, setResetForm);
-        if (resetForm) formName.resetFields();
-        setLoading(false);
+   
+    if(id){
+      debugger;
+      await formName.validateFields().then((updatevalues)=>{  
+        setLoading(true);
+        debugger;
+        let newValues ={...updatevalues, ...getValues, id:id}
+        ApiServices.update(`${controller}/${id}`, newValues).then(res=>{
+          if(res.status === 200){
+            formName.resetFields()
+            navigate(-1)
+            message.success("Data updated successfully!")
+            setLoading(false)
+          }
+        }).catch(err =>{
+          message.error(`Unable to Update error = ${err.response.data}`)
+          setLoading(false)
+        })
       })
-      .catch((err) => {
-        message.error("Please Check all the fields");
-        setLoading(false);
-      });
+    }
+   else{
+    await formName
+    .validateFields()
+    .then((values) => {
+     
+      let newValues = { ...values, ...getValues, id:uuid() };
+      ApiServices.create(controller, newValues, setResetForm);
+      if (resetForm) formName.resetFields();
+      setLoading(false);
+    })
+    .catch((err) => {
+      message.error("Please Check all the fields");
+      setLoading(false);
+    });
+   }
   };
   const onFinishFailed = (error) => {
     message.error(`Please Enter all required fields ${error}`);
