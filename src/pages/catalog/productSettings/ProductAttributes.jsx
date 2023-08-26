@@ -4,7 +4,7 @@ import {
   AppEditButton,
   AppViewButton,
 } from "../../../components/common/AppListViewScreen/AppListButtons";
-import { Space, Tag, Image } from "antd";
+import { Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import AppListViewScreen from "../../../components/common/AppListViewScreen";
 import ApiServices from "../../../services/ApiService";
