@@ -13,47 +13,61 @@ import Modal from "antd/es/modal/Modal";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import ApiServices from "../../../../services/ApiService";
+import AppControls from "../../../../components/common/AppControls";
+import { AppDeleteButton } from "../../../../components/common/AppListViewScreen/AppListButtons";
 
 export default function AddProductAttribute({ openPopUp, setOpenPopUp }) {
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [productAttributeForm] = Form.useForm();
-    const [attributesValuesForm] = Form.useForm();
-    const [attributeValues, setAttributeValues] = useState([]);
-    const onFinish = () => {
-        let formreset=false;
-        setConfirmLoading(true);
-        if (attributeValues.length < 1)
-          return message.error("Please Add Attribute Values!");
-        productAttributeForm
-          .validateFields()
-          .then((values) => {
-            let newValues = {
-              ...values,
-              id: uuid(),
-              attributeValues: attributeValues,
-            };
-            ApiServices.create("ProductAttribute",newValues,formreset)
-            setConfirmLoading(false);
-            if(formreset) productAttributeForm.resetFields()
-          })
-          .catch((err) => console.log(err));
-      };
-      const onFinishValues = (values) => {
-        let newValues = { ...values, id: uuid() };
-        console.log("values", newValues);
-        setAttributeValues((prev) => [...prev, newValues]);
-        attributesValuesForm.resetFields();
-      };
+  const { AppSwitchControl, AppInputNumberControl, AppInputControl } =
+    AppControls;
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [productAttributeForm] = Form.useForm();
+  const [attributesValuesForm] = Form.useForm();
+  const [attributeValues, setAttributeValues] = useState([]);
+  const [formrest, setformrest] = useState(false);
+  const onFinish = () => {
+    setConfirmLoading(true);
+    if (attributeValues.length < 1)
+      return message.error("Please Add Attribute Values!");
+    productAttributeForm
+      .validateFields()
+      .then(async (values) => {
+        debugger;
+        let newValues = {
+          ...values,
+          id: uuid(),
+          attributeValues: attributeValues,
+        };
+        await ApiServices.create(
+          "ProductAttribute",
+          newValues,
+          productAttributeForm
+        );
+        setConfirmLoading(false);
+        setAttributeValues([]);
+      })
+      .catch((err) => console.log(err));
+  };
+  const onFinishValues = (values) => {
+    debugger;
+    let newValues = { ...values, id: uuid() };
+    console.log("values", newValues);
+    setAttributeValues((prev) => [...prev, newValues]);
+    attributesValuesForm.resetFields();
+  };
+  const DeleteAttribute = (id) => {
+    const getList = attributeValues.filter((x) => x.id !== id);
+    setAttributeValues(getList);
+  };
   return (
     <Modal
-    open={openPopUp}
-    centered
-    onCancel={() => setOpenPopUp(false)}
-    title="Add Product Attribute"
-    onOk={onFinish}
-    width={850}
-    confirmLoading={confirmLoading}
-  >
+      open={openPopUp}
+      centered
+      onCancel={() => setOpenPopUp(false)}
+      title="Add Product Attribute"
+      onOk={onFinish}
+      width={850}
+      confirmLoading={confirmLoading}
+    >
       <Form
         name="basic"
         style={{ margin: "30px 0px" }}
@@ -67,30 +81,19 @@ export default function AddProductAttribute({ openPopUp, setOpenPopUp }) {
         }}
         autoComplete="off"
       >
-        <Form.Item
+        <AppInputControl
           label="Eng Name"
           name="engName"
-          rules={[
-            {
-              required: true,
-              message: "Please enter Eng Name",
-            },
-          ]}
-        >
-          <Input placeholder="Eng Name" />
-        </Form.Item>
-        <Form.Item
+          required={true}
+          min={3}
+        />
+
+        <AppInputControl
           label="Other Name"
           name="otherName"
-          rules={[
-            {
-              required: true,
-              message: "Please enter Other Name",
-            },
-          ]}
-        >
-          <Input placeholder="Other Name" />
-        </Form.Item>
+          required={true}
+          min={3}
+        />
       </Form>
       <Divider>Attribute Values</Divider>
       <Form
@@ -98,29 +101,20 @@ export default function AddProductAttribute({ openPopUp, setOpenPopUp }) {
         layout="inline"
         onFinish={onFinishValues}
       >
-        <Form.Item
-          label="Value"
-          name="value"
-          rules={[
-            {
-              required: true,
-              message: "Please Value",
-            },
-          ]}
-        >
-          <Input placeholder="Other Value" />
-        </Form.Item>
-        <Form.Item
-          label="Is Active"
+        <AppInputControl label="Value" name="value" required={true} />
+
+        <AppSwitchControl
+          label="Publish"
           name="isActive"
           valuePropName="checked"
-          initialValue
-        >
-          <Switch checkedChildren="Yes" unCheckedChildren="No" defaultChecked />
-        </Form.Item>
-        <Form.Item label="Display Order" name="displayOrder">
-          <Input placeholder="Display Order" />
-        </Form.Item>
+          defaultChecked
+        />
+        <AppInputNumberControl
+          label="Display Order"
+          name="displayOrder"
+          min={1}
+          max={1000000}
+        />
         <Form.Item noStyle>
           <Button htmlType="submit" icon={<PlusCircleFilled />}>
             Add
@@ -153,10 +147,22 @@ export default function AddProductAttribute({ openPopUp, setOpenPopUp }) {
               dataIndex: "displayOrder",
               key: "displayOrder",
             },
+            {
+              title: "Action",
+              dataIndex: "id",
+              key: "id",
+              render: (data) => (
+                <AppDeleteButton
+                  deleteTooltiptitle="Delete Attribute"
+                  data={data}
+                  onDelete={() => DeleteAttribute(data)}
+                />
+              ),
+            },
           ]}
           dataSource={attributeValues}
         />
       )}
     </Modal>
-  )
+  );
 }

@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import httpApi,{setAuthToken} from '../../Utilities/api';
+import { message } from 'antd';
 
 
 const AppContext = createContext();
@@ -14,23 +15,22 @@ const AppContextProvider = ({children}) => {
     const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
-    const [resetForm, setResetForm] = useState(false)
     const [token, setToken] = useState(localStorage.getItem('token_ecom') || null)
 
-    const resetFormFunc=()=>{
-      setResetForm(true)
-    }
+ 
 
   
  
     useEffect(() => {
 
-        const getAuthUser = () => {
+        const getAuthUser = async () => {
             debugger;
-          if (!token) return
+          if (!token) {
+          return  message.error("Please login again") 
+          }
           setAuthToken(token);
           setToken(token)
-          httpApi
+         await httpApi
             .get('Users/CurrentUser')
             .then(({data}) =>
             {
@@ -41,12 +41,16 @@ const AppContextProvider = ({children}) => {
             
             )
             .catch(err =>
-              console.log(err)
+              {
+               message.error(err.code)
+              localStorage.removeItem('token_ecom')
+              setToken(null)
+            }
             );
         };
     
         getAuthUser();
-      }, []);
+      }, [token]);
 
       const signInUser = async ({username, password}) => {
         try {
@@ -81,8 +85,7 @@ const AppContextProvider = ({children}) => {
             userData,
             loading,
             token,
-            error,
-            resetForm
+            error
         }}
         >
             <AppActionsContext.Provider
@@ -91,8 +94,7 @@ const AppContextProvider = ({children}) => {
                     setUserData,
                     signInUser,
                     logout,
-                    setLoading,
-                    setResetForm
+                    setLoading
                 }}
             >
             {children}

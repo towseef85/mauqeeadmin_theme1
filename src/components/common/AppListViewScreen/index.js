@@ -71,7 +71,12 @@ export default function AppListViewScreen({
         }}
         className="apps-content-container"
       >
-        <Table rowKey="id" className='table-responsive' columns={columnsList} dataSource={data}/>
+        <Table rowKey="id" 
+        className='table-responsive' 
+        columns={columnsList} 
+        dataSource={data}
+        {...rest}
+        />
       </div>
     </>
   )

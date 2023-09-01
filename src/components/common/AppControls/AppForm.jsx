@@ -21,48 +21,38 @@ export default function AppForm({
   title,
   buttonTitle,
   setFields,
+  hasSubmit = false,
+  onsubmit,
   ...rest
 }) {
   const [loading, setLoading] = useState(false);
-  const [resetForm, setResetForm] = useState(false);
+
   const navigate = useNavigate();
   const [formName] = Form.useForm();
-  const onFinish = async () => {
-   
-    if(id){
-      debugger;
-      await formName.validateFields().then((updatevalues)=>{  
-        setLoading(true);
-        debugger;
-        let newValues ={...updatevalues, ...getValues, id:id}
-        ApiServices.update(`${controller}/${id}`, newValues).then(res=>{
-          if(res.status === 200){
-            formName.resetFields()
-            navigate(-1)
-            message.success("Data updated successfully!")
-            setLoading(false)
-          }
-        }).catch(err =>{
-          message.error(`Unable to Update error = ${err.response.data}`)
-          setLoading(false)
-        })
-      })
+  const onFinish = async (values) => {
+    if (hasSubmit) {
+      return onsubmit(values);
     }
-   else{
-    await formName
-    .validateFields()
-    .then((values) => {
-     
-      let newValues = { ...values, ...getValues, id:uuid() };
-      ApiServices.create(controller, newValues, setResetForm);
-      if (resetForm) formName.resetFields();
+    if (id) {
+      let newValues = { ...values, ...getValues, id: id };
+      await ApiServices.update(`${controller}/${id}`, newValues)
+        .then((res) => {
+          if (res.status === 200) {
+            formName.resetFields();
+            navigate(-1);
+            message.success("Data updated successfully!");
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          message.error(`Unable to Update error = ${err.response.data}`);
+          setLoading(false);
+        });
+    } else {
+      let newValues = { ...values, ...getValues, id: uuid() };
+      await ApiServices.create(controller, newValues, formName);
       setLoading(false);
-    })
-    .catch((err) => {
-      message.error("Please Check all the fields");
-      setLoading(false);
-    });
-   }
+    }
   };
   const onFinishFailed = (error) => {
     message.error(`Please Enter all required fields ${error}`);

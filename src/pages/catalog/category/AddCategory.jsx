@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppForm from "../../../components/common/AppControls/AppForm";
 import { Col, Row, Space, Image, Button } from "antd";
-import AppInputControl from "../../../components/common/AppControls/AppInputControl";
 import { useParams } from "react-router-dom";
-import AppUploadControl from "../../../components/common/AppControls/AppUploadControl";
 import AppControls from "../../../components/common/AppControls";
 import { DeleteOutlined } from "@ant-design/icons";
 import ApiServices from "../../../services/ApiService";
@@ -14,7 +12,12 @@ export default function AddCategory() {
   const [showInHomePage, setShowInHomePage] = useState(false);
   const [singleCategory, setSingleCategory] = useState(null);
   const [setFields, setSetFields] = useState(null);
-  const { AppSwitchControl, AppInputNumberControl } = AppControls;
+  const {
+    AppSwitchControl,
+    AppInputNumberControl,
+    AppInputControl,
+    AppUploadControl,
+  } = AppControls;
   const getValues = { imageData: fileList };
 
   useEffect(() => {

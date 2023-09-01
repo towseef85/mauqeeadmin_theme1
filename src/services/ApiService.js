@@ -11,10 +11,10 @@ const ApiServices={
         }
 
     }).catch(err=> message.error('Unable to Get Data')),
-    create:async(url,values, setform)=>await httpApi.post(url,values).then(res=>{
+    create:async(url,values, formName)=>await httpApi.post(url,values).then(res=>{
         if(res.status=== 200){
             message.success('Data Added Successfully')
-            setform(true)
+            formName.resetFields()
         }
     }).catch(err =>{
         console.log('error',err.response.data)

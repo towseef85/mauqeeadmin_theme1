@@ -10,9 +10,10 @@ import AppListViewScreen from "../../../components/common/AppListViewScreen";
 import ApiServices from "../../../services/ApiService";
 import AddProductAttribute from "./components/AddProductAttribute";
 import AppContent from "../../../components/common/AppLayout/AppContent";
+import ProductAttributeValues from "./components/ProductAttributeValues";
 
 export default function ProductAttributes() {
-  const [productAttributelist, setProductAttributelist] = useState(null)
+  const [productAttributelist, setProductAttributelist] = useState(null);
   const [openPopUp, setOpenPopUp] = useState(false);
   useEffect(() => {
     ApiServices.list("ProductAttribute", setProductAttributelist);
@@ -22,6 +23,7 @@ export default function ProductAttributes() {
   const onChange = (page) => {
     setPage(page);
   };
+  console.log("productAttributelist", productAttributelist);
   const columns = [
     {
       title: "English Name",
@@ -54,15 +56,20 @@ export default function ProductAttributes() {
   ];
   return (
     <AppContent title="Product Settings">
-    <AppListViewScreen
-      btntitle="Add Product Attribute"
-      onClick={() => setOpenPopUp(true)}
-      columns={columns}
-      data={productAttributelist}
-      page={page}
-      onChange={onChange}
-    />
-     <AddProductAttribute openPopUp={openPopUp} setOpenPopUp={setOpenPopUp} />
+      <AppListViewScreen
+        btntitle="Add Product Attribute"
+        onClick={() => setOpenPopUp(true)}
+        columns={columns}
+        data={productAttributelist}
+        page={page}
+        onChange={onChange}
+        expandable={{
+          expandedRowRender: (record) => (
+            <ProductAttributeValues record={record.productAttributeValue} />
+          ),
+        }}
+      />
+      <AddProductAttribute openPopUp={openPopUp} setOpenPopUp={setOpenPopUp} />
     </AppContent>
   );
 }
