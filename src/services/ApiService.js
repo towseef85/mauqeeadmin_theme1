@@ -21,7 +21,7 @@ const ApiServices={
         message.error(`Failed error = ${err.response.data}`)
     }),
     update:async(url,values)=>await httpApi.put(url,values),
-    get:(id,url, setState)=> httpApi.get(`${url}/${id}`),
+    get:(id,url)=> httpApi.get(`${url}/${id}`),
 
     
 

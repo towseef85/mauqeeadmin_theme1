@@ -4,26 +4,42 @@ import {
   AppEditButton,
   AppViewButton,
 } from "../../../components/common/AppListViewScreen/AppListButtons";
-import { Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Space, message } from "antd";
 import AppListViewScreen from "../../../components/common/AppListViewScreen";
 import ApiServices from "../../../services/ApiService";
 import AddProductAttribute from "./components/AddProductAttribute";
 import AppContent from "../../../components/common/AppLayout/AppContent";
 import ProductAttributeValues from "./components/ProductAttributeValues";
+import { DownOutlined, RightOutlined } from "@ant-design/icons";
 
 export default function ProductAttributes() {
   const [productAttributelist, setProductAttributelist] = useState(null);
   const [openPopUp, setOpenPopUp] = useState(false);
+  const [setId, setSetId] = useState(null);
+  const [singleAttributes, setsingleAttributes] = useState(null);
+  const [attributeValues, setAttributeValues] = useState([]);
   useEffect(() => {
     ApiServices.list("ProductAttribute", setProductAttributelist);
   }, []);
-  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const onChange = (page) => {
     setPage(page);
   };
-  console.log("productAttributelist", productAttributelist);
+  const onEdit = async (data) => {
+    await ApiServices.get(data, "ProductAttribute")
+      .then((res) => {
+        if (res.status === 200) {
+          setsingleAttributes(res.data);
+          setAttributeValues(res.data.productAttributeValue);
+          setOpenPopUp(true);
+          setSetId(data);
+        }
+      })
+      .catch((err) =>
+        message.error("unable to get Data error", err.response.data)
+      );
+  };
+  console.log("singleAttributes", singleAttributes);
   const columns = [
     {
       title: "English Name",
@@ -43,7 +59,11 @@ export default function ProductAttributes() {
       key: "id",
       render: (data) => (
         <Space>
-          <AppEditButton editTooltiptitle="Edit Attribute" data={data} />
+          <AppEditButton
+            editTooltiptitle="Edit Attribute"
+            data={data}
+            onEditClick={() => onEdit(data)}
+          />
           <AppViewButton detailsTooltiptitle="Attribute Details" data={data} />
           <AppDeleteButton
             deleteTooltiptitle="Attribute"
@@ -67,9 +87,22 @@ export default function ProductAttributes() {
           expandedRowRender: (record) => (
             <ProductAttributeValues record={record.productAttributeValue} />
           ),
+          expandIcon: ({ expanded, onExpand, record }) =>
+            expanded ? (
+              <DownOutlined onClick={(e) => onExpand(record, e)} />
+            ) : (
+              <RightOutlined onClick={(e) => onExpand(record, e)} />
+            ),
         }}
       />
-      <AddProductAttribute openPopUp={openPopUp} setOpenPopUp={setOpenPopUp} />
+      <AddProductAttribute
+        setId={setId}
+        singleAttributes={singleAttributes}
+        openPopUp={openPopUp}
+        setOpenPopUp={setOpenPopUp}
+        attributeValues={attributeValues}
+        setAttributeValues={setAttributeValues}
+      />
     </AppContent>
   );
 }

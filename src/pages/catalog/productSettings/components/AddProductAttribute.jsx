@@ -1,14 +1,5 @@
 import { PlusCircleFilled } from "@ant-design/icons";
-import {
-  Button,
-  Divider,
-  Form,
-  Input,
-  Switch,
-  Table,
-  Tag,
-  message,
-} from "antd";
+import { Button, Divider, Form, Table, Tag, message } from "antd";
 import Modal from "antd/es/modal/Modal";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
@@ -16,36 +7,74 @@ import ApiServices from "../../../../services/ApiService";
 import AppControls from "../../../../components/common/AppControls";
 import { AppDeleteButton } from "../../../../components/common/AppListViewScreen/AppListButtons";
 
-export default function AddProductAttribute({ openPopUp, setOpenPopUp }) {
+export default function AddProductAttribute({
+  openPopUp,
+  setOpenPopUp,
+  setId,
+  singleAttributes,
+  attributeValues,
+  setAttributeValues,
+}) {
   const { AppSwitchControl, AppInputNumberControl, AppInputControl } =
     AppControls;
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [productAttributeForm] = Form.useForm();
   const [attributesValuesForm] = Form.useForm();
-  const [attributeValues, setAttributeValues] = useState([]);
-  const [formrest, setformrest] = useState(false);
+
+  if (setId && singleAttributes) {
+    productAttributeForm.setFieldsValue({
+      engName: singleAttributes.engName,
+      otherName: singleAttributes.otherName,
+    });
+  }
+
   const onFinish = () => {
     setConfirmLoading(true);
     if (attributeValues.length < 1)
       return message.error("Please Add Attribute Values!");
-    productAttributeForm
-      .validateFields()
-      .then(async (values) => {
-        debugger;
+    if (setId) {
+      debugger;
+      productAttributeForm.validateFields().then(async (updatedValues) => {
         let newValues = {
-          ...values,
-          id: uuid(),
+          ...updatedValues,
+          id: setId,
           attributeValues: attributeValues,
         };
-        await ApiServices.create(
-          "ProductAttribute",
-          newValues,
-          productAttributeForm
-        );
-        setConfirmLoading(false);
-        setAttributeValues([]);
-      })
-      .catch((err) => console.log(err));
+        await ApiServices.update(`ProductAttribute/${setId}`, newValues)
+          .then((res) => {
+            if (res.status === 200) {
+              productAttributeForm.resetFields();
+              setOpenPopUp(false);
+              setAttributeValues([]);
+            }
+          })
+          .catch((err) => {
+            message.error("unable to update data");
+          });
+      });
+    } else {
+      productAttributeForm
+        .validateFields()
+        .then(async (values) => {
+          debugger;
+          let newValues = {
+            ...values,
+            id: uuid(),
+            attributeValues: attributeValues,
+          };
+          await ApiServices.create(
+            "ProductAttribute",
+            newValues,
+            productAttributeForm
+          );
+          setConfirmLoading(false);
+          setAttributeValues([]);
+        })
+        .catch((err) => {
+          console.log(err);
+          setConfirmLoading(false);
+        });
+    }
   };
   const onFinishValues = (values) => {
     debugger;

@@ -76,6 +76,7 @@ export default function AppListViewScreen({
         columns={columnsList} 
         dataSource={data}
         {...rest}
+        
         />
       </div>
     </>
