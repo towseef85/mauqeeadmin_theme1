@@ -14,6 +14,7 @@ export default function AddProductAttribute({
   singleAttributes,
   attributeValues,
   setAttributeValues,
+  getList,
 }) {
   const { AppSwitchControl, AppInputNumberControl, AppInputControl } =
     AppControls;
@@ -28,19 +29,20 @@ export default function AddProductAttribute({
     });
   }
 
-  const onFinish = () => {
+  const onFinish = (e) => {
+    e.preventDefault();
     setConfirmLoading(true);
     if (attributeValues.length < 1)
       return message.error("Please Add Attribute Values!");
     if (setId) {
-      debugger;
-      productAttributeForm.validateFields().then(async (updatedValues) => {
+      productAttributeForm.validateFields().then(async (err, values) => {
+        debugger;
         let newValues = {
-          ...updatedValues,
+          ...values,
           id: setId,
           attributeValues: attributeValues,
         };
-        await ApiServices.update(`ProductAttribute/${setId}`, newValues)
+        ApiServices.update(`ProductAttribute/${setId}`, newValues)
           .then((res) => {
             if (res.status === 200) {
               productAttributeForm.resetFields();
@@ -69,6 +71,7 @@ export default function AddProductAttribute({
           );
           setConfirmLoading(false);
           setAttributeValues([]);
+          getList();
         })
         .catch((err) => {
           console.log(err);

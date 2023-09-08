@@ -2,6 +2,7 @@ import React from 'react'
 import httpApi from '../Utilities/api'
 import { message } from 'antd'
 
+
 const ApiServices={
 
     list:(url,setState)=> httpApi.get(url).then(res=>{
@@ -22,6 +23,7 @@ const ApiServices={
     }),
     update:async(url,values)=>await httpApi.put(url,values),
     get:(id,url)=> httpApi.get(`${url}/${id}`),
+    delete:async(url,id)=> await httpApi.delete(url,id)
 
     
 

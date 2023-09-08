@@ -11,16 +11,15 @@ import AddProductAttribute from "./components/AddProductAttribute";
 import AppContent from "../../../components/common/AppLayout/AppContent";
 import ProductAttributeValues from "./components/ProductAttributeValues";
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
+import { useFetch } from "../../../hooks/useFetch";
 
 export default function ProductAttributes() {
-  const [productAttributelist, setProductAttributelist] = useState(null);
+  const { response: productAttributelist } = useFetch("ProductAttribute");
   const [openPopUp, setOpenPopUp] = useState(false);
   const [setId, setSetId] = useState(null);
   const [singleAttributes, setsingleAttributes] = useState(null);
   const [attributeValues, setAttributeValues] = useState([]);
-  useEffect(() => {
-    ApiServices.list("ProductAttribute", setProductAttributelist);
-  }, []);
+
   const [page, setPage] = useState(0);
   const onChange = (page) => {
     setPage(page);
@@ -81,6 +80,7 @@ export default function ProductAttributes() {
         onClick={() => setOpenPopUp(true)}
         columns={columns}
         data={productAttributelist}
+        hasbackButton={true}
         page={page}
         onChange={onChange}
         expandable={{

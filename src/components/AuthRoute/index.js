@@ -1,4 +1,4 @@
-import React from "react";
+import React,{Suspense} from "react";
 import { useAppContext } from "../AppContexts/AppContext";
 import AppLayout from "../common/AppLayout";
 import SignIn from "../../pages/auth";
@@ -8,11 +8,16 @@ import AppLoader from "../AppLoader";
 function AuthRoute({ children }) {
   const {token, loading} = useAppContext()
   return (
-    <React.Suspense fallback={<AppLoader loading={loading}/>}>
+    <>
       {token ? 
-      <AppLayout>{children}</AppLayout> : <SignIn />
+      <AppLayout>
+          <Suspense fallback={<AppLoader loading={loading}/>}>
+          {children}
+          </Suspense>
+        </AppLayout> : <SignIn />
       }
-      </React.Suspense>
+    </>
+
   );
 }
 

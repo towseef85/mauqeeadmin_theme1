@@ -94,7 +94,8 @@ const AppContextProvider = ({children}) => {
                     setUserData,
                     signInUser,
                     logout,
-                    setLoading
+                    setLoading,
+                    setError
                 }}
             >
             {children}

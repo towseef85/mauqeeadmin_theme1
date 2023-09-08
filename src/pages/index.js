@@ -3,6 +3,7 @@ import { salesRoutes } from "./sales";
 import { catalogRoutes } from "./catalog";
 import { useRoutes } from "react-router-dom";
 
+
 const Dashboard = React.lazy(() => import("./home"));
 
 const CombineRoutes = [

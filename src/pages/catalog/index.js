@@ -1,18 +1,18 @@
 import '../index.styles.less';
 import React from "react";
-import Brands from "./brands";
-import Category from "./category";
-import Product from "./products";
-import ProductSettings from './productSettings';
-import ProductAttributes from './productSettings/ProductAttributes';
-import ProductTags from './productSettings/ProductTags';
-import TaxCategory from './productSettings/TaxCategory';
-import ShippingProviders from './productSettings/ShippingProviders';
-import Currencies from './productSettings/Currencies';
-import PaymentMethods from './productSettings/PaymentMethods';
-import GiftCards from './productSettings/GiftCards';
 
 
+const TaxCategory= React.lazy(()=>import('./productSettings/TaxCategory'));
+const ShippingProviders= React.lazy(()=>import('./productSettings/ShippingProviders'));
+const Currencies= React.lazy(()=>import('./productSettings/Currencies'));
+const PaymentMethods= React.lazy(()=>import('./productSettings/PaymentMethods'));
+const GiftCards= React.lazy(()=>import('./productSettings/GiftCards'));
+const Brands = React.lazy(()=> import('./brands'))
+const Category= React.lazy(() => import('./category'))
+const Product= React.lazy(() => import('./products'))
+const ProductSettings= React.lazy(() => import('./productSettings'))
+const ProductAttributes= React.lazy(()=>import('./productSettings/ProductAttributes'));
+const ProductTags= React.lazy(()=>import('./productSettings/ProductTags'));
 
 
 export const catalogRoutes=[
