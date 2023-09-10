@@ -24,8 +24,10 @@ const AppContextProvider = ({children}) => {
     useEffect(() => {
 
         const getAuthUser = async () => {
+          setLoading(true)
           if (!token) {
-          return  message.error("Please login again") 
+            setLoading(false)
+          return  message.warning("Please login again") 
           }
           setAuthToken(token);
           setToken(token)
@@ -35,6 +37,7 @@ const AppContextProvider = ({children}) => {
             {
                 setIsAuthenticated(true)
                 setUserData(data)
+                setLoading(false)
             }
             
             )
@@ -42,7 +45,9 @@ const AppContextProvider = ({children}) => {
               {
                message.error(err.code)
               localStorage.removeItem('token_ecom')
+              setIsAuthenticated(false)
               setToken(null)
+              setLoading(false)
             }
             );
         };
@@ -64,6 +69,7 @@ const AppContextProvider = ({children}) => {
             console.log("error", error)
             setError(error)
             setLoading(false)
+            setIsAuthenticated(true)
         }
       };
 

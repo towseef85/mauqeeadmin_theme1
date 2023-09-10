@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import ListScreen from "./components/ListScreen";
+import AppContent from "../../../components/common/AppLayout/AppContent";
+import AppListViewScreen from "../../../components/common/AppListViewScreen";
+
 
 export default function Currencies() {
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -21,14 +23,16 @@ export default function Currencies() {
     },
   ];
   return (
-    <ListScreen
-      pageTitle="Currencies"
+    <AppContent title="Currencies">
+    <AppListViewScreen
       btntitle="Add Currency"
+      onClick={() => setOpenPopUp(true)}
       columns={columns}
       data={[]}
-      onButtonClick={() => setOpenPopUp(true)}
       page={page}
       onChange={onChange}
+      hasbackButton={true}
     />
+    </AppContent>
   );
 }

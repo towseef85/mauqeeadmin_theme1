@@ -2,8 +2,12 @@ import React from "react";
 import "./index.style.less";
 import { Card } from "antd";
 import Login from "./Login";
+import { useAppContext } from "../../components/AppContexts/AppContext";
+import AppLoader from "../../components/AppLoader";
 
 export default function SignIn() {
+  const {loading} = useAppContext()
+  if(loading) return <AppLoader/>
   return (
     <div style={{ marginTop: "10%" }}>
       <div className="auth-wrap" key={"wrap"}>

@@ -6,10 +6,10 @@ import AppLoader from "../AppLoader";
 import AppErrorBoundary from "../common/AppErrorBoundary";
 
 function AuthRoute({ children }) {
-  const {token, loading} = useAppContext()
+  const {token, loading, isAuthenticated} = useAppContext()
   return (
     <>
-      {token ? 
+      {isAuthenticated ? 
       <AppLayout>
           <Suspense fallback={<AppLoader loading={loading}/>}>
             <AppErrorBoundary>
