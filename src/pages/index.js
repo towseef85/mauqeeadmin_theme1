@@ -4,7 +4,8 @@ import { catalogRoutes } from "./catalog";
 import { useRoutes } from "react-router-dom";
 
 
-const Dashboard = React.lazy(() => import("./home"));
+const Dashboard = React.lazy(()=> import('./home'))
+
 
 const CombineRoutes = [
   ...salesRoutes,
@@ -17,5 +18,5 @@ const route = CombineRoutes.map((x) => {
 });
 
 export default function AppRoutes() {
-  return useRoutes(route);
+  return useRoutes(route)
 }

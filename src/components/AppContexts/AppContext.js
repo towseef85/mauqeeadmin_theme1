@@ -24,7 +24,6 @@ const AppContextProvider = ({children}) => {
     useEffect(() => {
 
         const getAuthUser = async () => {
-            debugger;
           if (!token) {
           return  message.error("Please login again") 
           }
@@ -34,7 +33,6 @@ const AppContextProvider = ({children}) => {
             .get('Users/CurrentUser')
             .then(({data}) =>
             {
-                debugger;
                 setIsAuthenticated(true)
                 setUserData(data)
             }
@@ -61,6 +59,7 @@ const AppContextProvider = ({children}) => {
           setToken(data.token)
           setIsAuthenticated(true)
           setUserData(data)
+          setLoading(false)
         } catch (error) {
             console.log("error", error)
             setError(error)

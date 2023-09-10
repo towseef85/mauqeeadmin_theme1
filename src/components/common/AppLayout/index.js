@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -12,11 +12,13 @@ import {
 
 import './index.style.less'
 import AppHeader from './AppHeader';
-import { Outlet } from 'react-router-dom';
+
+
 
 const { Header, Sider, Content } = Layout;
 
 export default function AppLayout({children}) {
+
     const [collapsed, setCollapsed] = useState(false);
   return (
     <Layout className='app-layout'>
@@ -26,7 +28,7 @@ export default function AppLayout({children}) {
       <Content
         className='main-content-view'
       >
-        {children}
+        { children}
       </Content>
     </Layout>
   </Layout>
