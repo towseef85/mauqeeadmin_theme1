@@ -6,7 +6,7 @@ import AppLoader from "../AppLoader";
 import AppErrorBoundary from "../common/AppErrorBoundary";
 
 function AuthRoute({ children }) {
-  const {token, loading, isAuthenticated} = useAppContext()
+  const {loading, isAuthenticated} = useAppContext()
   return (
     <>
       {isAuthenticated ? 
